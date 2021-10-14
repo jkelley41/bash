@@ -1,0 +1,294 @@
+# ====================================================
+#
+# RHEL 7 RMF Audit Configuration
+# /etc/audit/rules.d/audit.rules
+# =====================================================
+
+# =======================================
+#
+# System
+#
+# =======================================
+
+# Remove any existing rules
+-D
+
+# Increase kernel buffer size
+-b 16384
+
+# Failure of auditd causes a kernel panic
+-f 2
+
+-a always,exit -F arch=b32 -S acct -S reboot -S sched_setparam -S sched_setscheduler -S setrlimit -S swapon -k system_event
+-a always,exit -F arch=b64 -S acct -S reboot -S sched_setparam -S sched_setscheduler -S setrlimit -S swapon -k system_event
+
+# =======================================
+#
+# Removable Media
+#
+# =======================================
+
+-w /dev/cdrom -p r -k cdrom-activity
+-w /dev/cdrom -p w -k cdrom-activity
+
+-a always,exit -F arch=b64 -S mount,umount2 -F dir=/run/media -F key=media
+-a always,exit -F arch=b64 -S mount,umount2 -F dir=/media -F key=media
+-a always,exit -F arch=b64 -S mount,umount2 -F dir=/dev/cdrom -F key=media
+-a always,exit -F arch=b64 -S mount,umount2 -F dir=/dev/sr0 -F key=media
+
+# =======================================
+#
+# Privilege Escalation
+#
+# =======================================
+-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -F auid>=1000 -F auid!=-1 -k sudolog
+-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -F auid>=1000 -F auid!=-1 -k sudolog
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -F auid>=1000 -F auid!=-1 -k sudolog
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -F auid>=1000 -F auid!=-1 -k sudolog
+
+-a always,exit -F arch=b32 -S execve -C uid!=euid -F euid=0 -k setuid
+-a always,exit -F arch=b32 -S execve -C gid!=egid -F egid=0 -k setgid
+
+-a always,exit -F arch=b64 -S execve -C uid!=euid -F euid=0 -k setuid
+-a always,exit -F arch=b64 -S execve -C gid!=egid -F egid=0 -k setgid
+
+# =======================================
+#
+# Configuration
+#
+# =======================================
+-w /etc/rsyslog.conf -p wa -k conf_mod
+-w /etc/rsyslog.d/ -p wa -k conf_mod
+
+-w /etc/pam.d/ -p wa -k conf_mod
+-w /etc/nsswitch.conf -p wa -k conf_mod
+
+-w /etc/audit/auditd.conf -p wa -k conf_mod
+-w /etc/audit/audit.rules -p wa -k conf_mod
+
+-w /etc/login.defs -p wa -k conf_mod
+-w /etc/securetty -p wa -k conf_mod
+-w /etc/resolv.conf -p wa -k conf_mod
+
+-w /etc/at.allow -p wa -k conf_mod
+-w /etc/at.deny -p wa -k conf_mod
+-w /var/spool/at/ -p wa -k conf_mod
+-w /etc/crontab -p wa -k conf_mod
+-w /etc/anacrontab -p wa -k conf_mod
+-w /etc/cron.allow -p wa -k conf_mod
+-w /etc/cron.deny -p wa -k conf_mod
+-w /etc/cron.d/ -p wa -k conf_mod
+-w /etc/cron.hourly/ -p wa -k conf_mod
+-w /etc/cron.weekly/ -p wa -k conf_mod
+-w /etc/cron.monthly/ -p wa -k conf_mod
+
+-w /etc/sysctl.conf -p wa -k conf_mod
+-w /etc/modprobe.conf -p wa -k conf_mod
+
+-w /etc/fstab -p wa -k conf_mod
+-w /etc/exports -p wa -k conf_mod
+
+-w /etc/grub2.cfg -p wa -k conf_mod
+-w /etc/grub.d/ -p wa -k conf_mod
+
+# =======================================
+#
+# Logins
+#
+# =======================================
+
+-w /var/run/faillock -p wa -k logins
+-w /var/log/lastlog -p wa -k logins
+-w /var/log/tallylog -p wa -k logins
+
+# =======================================
+#
+# Time
+#
+# =======================================
+
+-a always,exit -F arch=b32 -S stime -S adjtimex -S settimeofday -S clock_settime -k time_mod
+-a always,exit -F arch=b64 -S adjtimex -S settimeofday -S clock_settime -k time_mod
+
+-w /etc/localtime -p wa -k time_mod
+
+# =======================================
+#
+# Account Changes
+#
+# =======================================
+
+-w /etc/group -p wa -k account_mod
+-w /etc/passwd -p wa -k account_mod
+-w /etc/gshadow -p wa -k account_mod
+-w /etc/shadow -p wa -k account_mod
+-w /etc/security/opasswd -p wa -k account_mod
+
+# =======================================
+#
+# Network Modifications
+#
+# =======================================
+
+-a always,exit -F arch=b32 -S sethostname -S setdomainname -k network_mod
+-a always,exit -F arch=b64 -S sethostname -S setdomainname -k network_mod
+
+-w /etc/issue -p wa -k network_mod
+-w /etc/issue.net -p wa -k network_mod
+-w /etc/hosts -p wa -k network_mod
+-w /etc/sysconfig/network -p wa -k network_mod
+
+# =======================================
+#
+# SELinux
+#
+# =======================================
+
+-w /etc/selinux/ -p wa -k selinux_mod
+
+# =======================================
+#
+# Permissions
+#
+# =======================================
+
+-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k permissions_mod
+-a always,exit -F arch=b32 -S chown -S fchown -S fchownat -S lchown -F auid=0 -k permissions_mod
+
+-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid>=1000 -F auid!=4294967295 -k permissions_mod
+-a always,exit -F arch=b64 -S chown -S fchown -S fchownat -S lchown -F auid=0 -k permissions_mod
+
+-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k permissions_mod
+-a always,exit -F arch=b32 -S chmod -S fchmod -S fchmodat -F auid=0 -F auid!=4294967295 -k permissions_mod
+
+-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid>=1000 -F auid!=4294967295 -k permissions_mod
+-a always,exit -F arch=b64 -S chmod -S fchmod -S fchmodat -F auid=0 -F auid!=4294967295 -k permissions_mod
+
+-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k permissions_mod
+-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid>=1000 -F auid!=4294967295 -k permissions_mod
+
+-a always,exit -F arch=b32 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid=0 -k permissions_mod
+-a always,exit -F arch=b64 -S setxattr -S lsetxattr -S fsetxattr -S removexattr -S lremovexattr -S fremovexattr -F auid=0 -k permissions_mod
+
+# =======================================
+#
+# File Access
+#
+# =======================================
+
+-a always,exit -F arch=b32 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b32 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EACCES -F auid>=1000 -F auid!=4294967295 -k access
+-a always,exit -F arch=b64 -S creat -S open -S openat -S open_by_handle_at -S truncate -S ftruncate -F exit=-EPERM -F auid>=1000 -F auid!=4294967295 -k access
+
+# =======================================
+#
+# File Deletion
+#
+# =======================================
+
+-a always,exit -F arch=b32 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b32 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete
+
+-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid>=1000 -F auid!=4294967295 -k delete
+-a always,exit -F arch=b64 -S rmdir -S unlink -S unlinkat -S rename -S renameat -F auid=0 -k delete
+
+# =======================================
+#
+# Modules
+#
+# =======================================
+
+-w /sbin/insmod -p x -F auid!=4294967295 -k module-change
+-w /sbin/rmmod -p x -F auid!=4294967295 -k module-change
+-w /sbin/modprobe -p x -F auid!=4294967295 -k module-change
+-w /usr/bin/kmod -p x -F auid!=4294967295 -k module-change
+
+-a always,exit -F arch=b32 -S init_module -S delete_module -k module-change
+-a always,exit -F arch=b32 -S create_module -S finit_module -k module-change
+-a always,exit -F arch=b64 -S init_module -S delete_module -k module-change
+-a always,exit -F arch=b64 -S create_module -S finit_module -k module-change
+
+# =======================================
+#
+# Privileged Commands
+#
+# =======================================
+
+
+-a always,exit -F arch=b32 -S mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+-a always,exit -F arch=b32 -F path=/bin/mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+-a always,exit -F arch=b32 -F path=/usr/bin/mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+
+-a always,exit -F arch=b32 -S mount -F auid=0 -k privileged-mount
+-a always,exit -F arch=b32 -F path=/bin/mount -F auid=0 -k privileged-mount
+-a always,exit -F arch=b32 -F path=/usr/bin/mount -F auid=0 -k privileged-mount
+
+-a always,exit -F arch=b64 -S mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+-a always,exit -F arch=b64 -F path=/bin/mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+-a always,exit -F arch=b64 -F path=/usr/bin/mount -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+
+-a always,exit -F arch=b64 -S mount -F auid=0 -k privileged-mount
+-a always,exit -F arch=b64 -F path=/bin/mount -F auid=0 -k privileged-mount
+-a always,exit -F arch=b64 -F path=/usr/bin/mount -F auid=0 -k privileged-mount
+
+-w /etc/sudoers -p wa -k privileged-actions
+-w /etc/sudoers.d/ -p wa -k privileged-actions
+
+-a always,exit -F path=/usr/sbin/semanage -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+-a always,exit -F path=/usr/sbin/setsebool -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+-a always,exit -F path=/usr/bin/chcon -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+-a always,exit -F path=/usr/sbin/setfiles -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+
+-a always,exit -F path=/bin/sudoedit -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-priv_change
+-a always,exit -F path=/bin/umount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-mount
+-a always,exit -F path=/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged-pam
+
+
+-a always,exit -F path=/usr/bin/fusermount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/wall -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/passwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/chage -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/gpasswd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/newgrp -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/chfn -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/chsh -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/mount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/su -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/umount -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/write -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/crontab -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/ssh-agent -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/pkexec -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/Xorg -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/at -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/sudo -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/ksu -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/locate -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/screen -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/bin/staprun -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/unix_chkpwd -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/pam_timestamp_check -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/userhelper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/lockdev -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/netreport -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/usernetctl -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/mount.nfs -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/postdrop -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/sbin/postqueue -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/lib/polkit-1/polkit-agent-helper-1 -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/lib64/vte-2.91/gnome-pty-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/utempter/utempter -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/qemu-bridge-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/dbus-1/dbus-daemon-launch-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/openssh/ssh-keysign -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/flatpak-bwrap -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/sssd/krb5_child -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/sssd/ldap_child -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/sssd/selinux_child -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/sssd/proxy_child -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/spice-gtk-x86_64/spice-client-glib-usb-acl-helper -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+-a always,exit -F path=/usr/libexec/clevis-luks-udisks2 -F perm=x -F auid>=1000 -F auid!=4294967295 -k privileged
+
+-a always,exit -F arch=b64 -S mount -S umount2 -F auid>=1000 -k export
+-a always,exit -F arch=b32 -S mount -S umount2 -F auid>=1000 -k export

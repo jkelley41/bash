@@ -1,0 +1,326 @@
+#############################################################
+##
+##      LINUX AUDIT SCRIPT
+##      ------------------
+##      HOSTNAME: localhost.localdomain
+##      SCRIPT RUNTIME: Mon May 17 17:51:01 EDT 2021
+##
+#############################################################
+
+#############################################################
+ 1. RECENT ROOT SESSIONS ///// Verify against SUDO USE LOG
+root     pts/0        10.10.10.101     Mon May 17 15:25:09 2021 - Mon May 17 15:37:46 2021  (00:12)    
+root     pts/1        10.10.10.101     Mon May 17 14:41:52 2021 - down                      (00:41)    
+root     pts/0        10.10.10.101     Mon May 17 14:36:22 2021 - Mon May 17 14:38:54 2021  (00:02)    
+root     pts/0        10.10.10.101     Mon May 17 14:02:06 2021 - Mon May 17 14:35:57 2021  (00:33)    
+root     pts/1        10.10.10.101     Mon May 17 10:44:59 2021 - Mon May 17 14:13:50 2021  (03:28)    
+root     pts/0        10.10.10.101     Thu May 13 16:34:17 2021 - Thu May 13 16:44:17 2021  (00:10)    
+root     pts/2        0.0.0.0          Thu May 13 16:20:28 2021 - Thu May 13 16:21:35 2021  (00:01)    
+root     :0           0.0.0.0          Thu May 13 16:18:24 2021 - Thu May 13 16:21:35 2021  (00:03)    
+root     :0           0.0.0.0          Thu May 13 16:18:22 2021 - Thu May 13 16:18:24 2021  (00:00)    
+root     pts/2        0.0.0.0          Thu May 13 15:53:23 2021 - Thu May 13 16:06:11 2021  (00:12)    
+root     pts/0        10.10.10.101     Thu May 13 15:26:04 2021 - Thu May 13 16:34:06 2021  (01:08)    
+root     pts/1        0.0.0.0          Thu May 13 14:16:44 2021 - Thu May 13 14:16:55 2021  (00:00)    
+root     pts/1        0.0.0.0          Thu May 13 14:11:37 2021 - Thu May 13 14:12:05 2021  (00:00)    
+root     pts/0        10.10.10.101     Thu May 13 13:59:18 2021 - Thu May 13 15:22:16 2021  (01:22)    
+root     pts/0        10.10.10.101     Thu May 13 12:59:11 2021 - Thu May 13 13:09:11 2021  (00:10)    
+root     pts/0        10.10.10.101     Thu May 13 12:34:39 2021 - Thu May 13 12:44:39 2021  (00:10)    
+root     pts/0        10.10.10.101     Thu May 13 12:02:29 2021 - Thu May 13 12:34:34 2021  (00:32)    
+root     pts/0        10.10.10.101     Wed May 12 17:25:20 2021 - Wed May 12 18:32:49 2021  (01:07)    
+root     pts/0        10.10.10.101     Wed May 12 13:50:39 2021 - Wed May 12 16:48:50 2021  (02:58)    
+root     pts/0        10.10.10.101     Wed May 12 10:46:30 2021 - Wed May 12 11:01:26 2021  (00:14)    
+root     pts/1        10.10.10.101     Wed May 12 10:14:04 2021 - Wed May 12 14:04:17 2021  (03:50)    
+root     pts/0        10.10.10.101     Wed May 12 10:10:46 2021 - Wed May 12 10:42:07 2021  (00:31)    
+root     pts/0        10.10.10.101     Tue May 11 17:25:10 2021 - Tue May 11 17:44:55 2021  (00:19)    
+root     pts/1        10.10.10.101     Tue May 11 17:07:14 2021 - Tue May 11 18:28:22 2021  (01:21)    
+root     pts/0        10.10.10.101     Tue May 11 17:04:07 2021 - Tue May 11 17:24:13 2021  (00:20)    
+root     pts/1        10.10.10.101     Tue May 11 16:22:14 2021 - Tue May 11 17:04:02 2021  (00:41)    
+root     pts/0        0.0.0.0          Thu May  6 17:32:19 2021 - Tue May 11 16:55:48 2021 (4+23:23)   
+root     :0           0.0.0.0          Thu May  6 17:32:03 2021 - Thu May 13 14:07:48 2021 (6+20:35)   
+root     :0           0.0.0.0          Thu May  6 17:32:00 2021 - Thu May  6 17:32:03 2021  (00:00)    
+root     pts/0        0.0.0.0          Thu May  6 17:30:12 2021 - Thu May  6 17:31:06 2021  (00:00)    
+root     pts/0        0.0.0.0          Thu May  6 17:20:38 2021 - Thu May  6 17:23:45 2021  (00:03)    
+root     :0           0.0.0.0          Thu May  6 17:20:30 2021 - down                      (00:10)    
+root     :0           0.0.0.0          Thu May  6 17:20:30 2021 - Thu May  6 17:20:30 2021  (00:00)    
+
+wtmp begins Wed May  5 03:22:29 2021
+
+#############################################################
+
+#############################################################
+ 2. PRIVILEGE ESCALATION ///// Verify against SUDO USE LOG
+type=PROCTITLE msg=audit(05/12/2021 15:29:41.178:14458) : proctitle=sudo touch t.i 
+type=SYSCALL msg=audit(05/12/2021 15:29:41.178:14458) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x15e1980 a1=0x16900c0 a2=0x16fd230 a3=0x7fff824a0f20 items=2 ppid=27805 pid=27835 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1013 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 15:29:43.325:14461) : proctitle=/usr/sbin/unix_chkpwd jake nonull 
+type=SYSCALL msg=audit(05/12/2021 15:29:43.325:14461) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fbefd5243ad a1=0x7ffce6ac25a0 a2=0x7fbefd72b3c0 a3=0x2 items=2 ppid=27835 pid=27836 auid=jake uid=root gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1013 comm=unix_chkpwd exe=/usr/sbin/unix_chkpwd subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 15:29:43.340:14464) : proctitle=/usr/sbin/unix_chkpwd jake chkexpiry 
+type=SYSCALL msg=audit(05/12/2021 15:29:43.340:14464) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fbefd5243ad a1=0x7ffce6ac2790 a2=0x7fbefd727388 a3=0x2 items=2 ppid=27835 pid=27837 auid=jake uid=root gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1013 comm=unix_chkpwd exe=/usr/sbin/unix_chkpwd subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 15:29:43.348:14473) : proctitle=sudo touch t.i 
+type=SYSCALL msg=audit(05/12/2021 15:29:43.348:14473) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x55e7ef40a268 a1=0x55e7ef41cc18 a2=0x55e7ef434160 a3=0x0 items=2 ppid=27835 pid=27838 auid=jake uid=root gid=root euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=pts1 ses=1013 comm=touch exe=/usr/bin/touch subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 15:36:15.847:14810) : proctitle=sudo touch r.a 
+type=SYSCALL msg=audit(05/12/2021 15:36:15.847:14810) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x15e1390 a1=0x169ccb0 a2=0x16fd230 a3=0x7fff824a0f20 items=2 ppid=27805 pid=27981 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1013 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 15:39:42.533:14847) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/12/2021 15:39:42.533:14847) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x15e3580 a1=0x15e4ac0 a2=0x16fd230 a3=0x7fff824a0f20 items=2 ppid=27805 pid=28025 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1013 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 15:39:52.005:14859) : proctitle=locate audit 
+type=SYSCALL msg=audit(05/12/2021 15:39:52.005:14859) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x21fa5f0 a1=0x21fa530 a2=0x2209080 a3=0x7fff36acfce0 items=2 ppid=28027 pid=28050 auid=jake uid=root gid=root euid=root suid=root fsuid=root egid=slocate sgid=slocate fsgid=slocate tty=pts1 ses=1013 comm=locate exe=/usr/bin/locate subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 15:42:54.356:14877) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/12/2021 15:42:54.356:14877) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x15e12e0 a1=0x15e3560 a2=0x16fd230 a3=0x7fff824a0f20 items=2 ppid=27805 pid=28088 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1013 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 16:37:50.377:15819) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/12/2021 16:37:50.377:15819) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x1650e90 a1=0x15e4640 a2=0x16fd230 a3=0x7fff824a0f20 items=2 ppid=27805 pid=31286 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1013 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/12/2021 17:55:30.790:16858) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/12/2021 17:55:30.790:16858) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x1566960 a1=0x156ed10 a2=0x1682230 a3=0x7ffffd6a1da0 items=2 ppid=2078 pid=2116 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1041 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:08:52.835:22113) : proctitle=fusermount -o rw,nosuid,nodev,subtype=gvfsd-fuse -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 14:08:52.835:22113) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7ff8e580bded a1=0x7ffd5b4d1bd0 a2=0x1045100 a3=0x7ffd5b4d2f8e items=2 ppid=18332 pid=18333 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1189 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:08:56.494:22302) : proctitle=/usr/libexec/clevis-luks-udisks2 
+type=SYSCALL msg=audit(05/13/2021 14:08:56.494:22302) : arch=x86_64 syscall=execve success=yes exit=0 a0=0xeca4a0 a1=0xeca480 a2=0xeca560 a3=0x7ffddf48b720 items=2 ppid=18283 pid=18879 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1189 comm=clevis-luks-udi exe=/usr/libexec/clevis-luks-udisks2 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:11:07.215:22453) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/13/2021 14:11:07.215:22453) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17bf1e0 a1=0x17bf5a0 a2=0x18b0660 a3=0x7fffea7bb0e0 items=2 ppid=19369 pid=19395 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1189 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:11:09.813:22463) : proctitle=sendmail -t 
+type=SYSCALL msg=audit(05/13/2021 14:11:09.813:22463) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x56540605c060 a1=0x7ffea6beee00 a2=0x7f94c5ab8460 a3=0x2 items=2 ppid=19399 pid=19400 auid=cd uid=root gid=cd euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=(none) ses=1189 comm=sendmail exe=/usr/sbin/sendmail.postfix subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:11:13.151:22474) : proctitle=sudo su - 
+type=SYSCALL msg=audit(05/13/2021 14:11:13.151:22474) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17bbf90 a1=0x17bbe20 a2=0x18b0660 a3=0x7fffea7bb0e0 items=2 ppid=19369 pid=19411 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1189 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:11:15.493:22483) : proctitle=sendmail -t 
+type=SYSCALL msg=audit(05/13/2021 14:11:15.493:22483) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x55899f243060 a1=0x7ffe93a372f0 a2=0x7f7c7065b460 a3=0x2 items=2 ppid=19415 pid=19416 auid=cd uid=root gid=cd euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=(none) ses=1189 comm=sendmail exe=/usr/sbin/sendmail.postfix subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:11:27.070:22490) : proctitle=sudo root 
+type=SYSCALL msg=audit(05/13/2021 14:11:27.070:22490) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17bf1e0 a1=0x17c40e0 a2=0x18b0660 a3=0x7fffea7bb0e0 items=2 ppid=19369 pid=19424 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1189 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:11:29.573:22500) : proctitle=sendmail -t 
+type=SYSCALL msg=audit(05/13/2021 14:11:29.573:22500) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x564831e20790 a1=0x7fff95b023f0 a2=0x7fd010bfb460 a3=0x2 items=2 ppid=19428 pid=19429 auid=cd uid=root gid=cd euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=(none) ses=1189 comm=sendmail exe=/usr/sbin/sendmail.postfix subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:11:34.830:22506) : proctitle=su - root 
+type=SYSCALL msg=audit(05/13/2021 14:11:34.830:22506) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17c44a0 a1=0x18a99e0 a2=0x18b0660 a3=0x7fffea7bb0e0 items=2 ppid=19369 pid=19437 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1189 comm=su exe=/usr/bin/su subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:12:08.222:22552) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:12:08.222:22552) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17bbfe0 a1=0x17d4cb0 a2=0x18b0660 a3=0x7fffea7bb0e0 items=2 ppid=19369 pid=19489 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1189 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:15:07.140:22612) : proctitle=fusermount -u -q -z -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 14:15:07.140:22612) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7ff8e580bded a1=0x7ffd5b4d1f70 a2=0x7ffd5b4d21e8 a3=0x7ff8e2a967f8 items=2 ppid=18332 pid=19581 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1189 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:15:18.535:22765) : proctitle=fusermount -o rw,nosuid,nodev,subtype=gvfsd-fuse -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 14:15:18.535:22765) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fb135b3eded a1=0x7fff65e019b0 a2=0xe8b100 a3=0x7fff65e02f8e items=2 ppid=19940 pid=19941 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1191 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:15:21.903:22830) : proctitle=/usr/libexec/clevis-luks-udisks2 
+type=SYSCALL msg=audit(05/13/2021 14:15:21.903:22830) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x2452d50 a1=0x2452d30 a2=0x2452e10 a3=0x7ffcf98e6220 items=2 ppid=19891 pid=20467 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1191 comm=clevis-luks-udi exe=/usr/libexec/clevis-luks-udisks2 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:15:39.421:22904) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:15:39.421:22904) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17a19e0 a1=0x167f580 a2=0x1771b10 a3=0x7ffdae2cc420 items=2 ppid=20651 pid=20699 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:15:56.045:22909) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:15:56.045:22909) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17a1a20 a1=0x17a6250 a2=0x1771b10 a3=0x7ffdae2cc420 items=2 ppid=20651 pid=20719 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:15:58.716:22910) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:15:58.716:22910) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17a7420 a1=0x17a1570 a2=0x1771b10 a3=0x7ffdae2cc420 items=2 ppid=20651 pid=20726 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:16:14.380:22944) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:16:14.380:22944) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x2571e60 a1=0x25735a0 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20802 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:16:20.188:22945) : proctitle=umount /dev/sr0 
+type=SYSCALL msg=audit(05/13/2021 14:16:20.188:22945) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x256f160 a1=0x25eb330 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20809 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=umount exe=/usr/bin/umount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:16:26.332:22946) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:16:26.332:22946) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x256edb0 a1=0x268c350 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20819 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:16:42.572:22947) : proctitle=su - root 
+type=SYSCALL msg=audit(05/13/2021 14:16:42.572:22947) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x259ab80 a1=0x266c030 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20826 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=su exe=/usr/bin/su subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:17:10.444:23053) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:17:10.444:23053) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x2573f00 a1=0x256ecd0 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20901 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:17:15.643:23054) : proctitle=umount /dev/sr0 
+type=SYSCALL msg=audit(05/13/2021 14:17:15.643:23054) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x256ed10 a1=0x2589da0 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20908 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=umount exe=/usr/bin/umount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:17:21.659:23068) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:17:21.659:23068) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x2589cd0 a1=0x256ed50 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20926 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:17:24.171:23069) : proctitle=umount /dev/sr0 
+type=SYSCALL msg=audit(05/13/2021 14:17:24.171:23069) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x2640ce0 a1=0x256f160 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20933 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=umount exe=/usr/bin/umount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:18:07.355:23119) : proctitle=mount 
+type=SYSCALL msg=audit(05/13/2021 14:18:07.355:23119) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x262db30 a1=0x2589d60 a2=0x2664b10 a3=0x7ffe07376760 items=2 ppid=20776 pid=20987 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts1 ses=1191 comm=mount exe=/usr/bin/mount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:18:33.492:23198) : proctitle=fusermount -u -q -z -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 14:18:33.492:23198) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fb135b3eded a1=0x7fff65e01d50 a2=0x7fff65e01fc8 a3=0x7fb132dc97f8 items=2 ppid=19940 pid=21022 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1191 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:18:48.512:23317) : proctitle=fusermount -o rw,nosuid,nodev,subtype=gvfsd-fuse -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 14:18:48.512:23317) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fb75b958ded a1=0x7ffd71245e60 a2=0x211c100 a3=0x7ffd71246f8e items=2 ppid=21378 pid=21379 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1192 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 14:18:51.946:23383) : proctitle=/usr/libexec/clevis-luks-udisks2 
+type=SYSCALL msg=audit(05/13/2021 14:18:51.946:23383) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x118cc20 a1=0x118cc00 a2=0x118cce0 a3=0x7ffed86ecc60 items=2 ppid=21329 pid=21895 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1192 comm=clevis-luks-udi exe=/usr/libexec/clevis-luks-udisks2 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 15:40:51.207:25174) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/13/2021 15:40:51.207:25174) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x15bf960 a1=0x15c7d10 a2=0x16db230 a3=0x7fffc61a7120 items=2 ppid=24637 pid=24669 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts1 ses=1204 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 15:53:16.223:26235) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/13/2021 15:53:16.223:26235) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x1799240 a1=0x1782b80 a2=0x1875b10 a3=0x7ffd6a832560 items=2 ppid=25330 pid=25360 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts2 ses=1192 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 15:53:18.138:26249) : proctitle=sendmail -t 
+type=SYSCALL msg=audit(05/13/2021 15:53:18.138:26249) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x561c92b73060 a1=0x7fff561995c0 a2=0x7fb24cdf6460 a3=0x2 items=2 ppid=25368 pid=25370 auid=cd uid=root gid=cd euid=root suid=root fsuid=root egid=root sgid=root fsgid=root tty=(none) ses=1192 comm=sendmail exe=/usr/sbin/sendmail.postfix subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 15:53:21.343:26264) : proctitle=su - root 
+type=SYSCALL msg=audit(05/13/2021 15:53:21.343:26264) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x17837d0 a1=0x177fe20 a2=0x1875b10 a3=0x7ffd6a832560 items=2 ppid=25330 pid=25385 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=pts2 ses=1192 comm=su exe=/usr/bin/su subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:18:12.599:28047) : proctitle=fusermount -u -q -z -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:18:12.599:28047) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fb75b958ded a1=0x7ffd71246200 a2=0x7ffd71246478 a3=0x7fb758be37f8 items=2 ppid=21378 pid=26756 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1192 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:21:46.140:28610) : proctitle=fusermount -o rw,nosuid,nodev,subtype=gvfsd-fuse -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:21:46.140:28610) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fa1e82d5ded a1=0x7ffc6a92ebe0 a2=0x1945100 a3=0x7ffc6a92ff8e items=2 ppid=28555 pid=28556 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1211 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:21:49.552:28689) : proctitle=/usr/libexec/clevis-luks-udisks2 
+type=SYSCALL msg=audit(05/13/2021 16:21:49.552:28689) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x19bf2c0 a1=0x19becb0 a2=0x19bf380 a3=0x7ffec1df47a0 items=2 ppid=28506 pid=29092 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1211 comm=clevis-luks-udi exe=/usr/libexec/clevis-luks-udisks2 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:34:25.190:28932) : proctitle=fusermount -u -q -z -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:34:25.190:28932) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fa1e82d5ded a1=0x7ffc6a92ef80 a2=0x7ffc6a92f1f8 a3=0x7fa1e55607f8 items=2 ppid=28555 pid=29580 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1211 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:34:51.563:29087) : proctitle=fusermount -o rw,nosuid,nodev,subtype=gvfsd-fuse -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:34:51.563:29087) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fb3ab8c8ded a1=0x7ffc84b3ec80 a2=0x1f9a100 a3=0x7ffc84b3ff8e items=2 ppid=29932 pid=29933 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1214 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:34:54.909:29157) : proctitle=/usr/libexec/clevis-luks-udisks2 
+type=SYSCALL msg=audit(05/13/2021 16:34:54.909:29157) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x18b5c60 a1=0x18b5300 a2=0x18b5d20 a3=0x7ffc8ef2aa60 items=2 ppid=29883 pid=30455 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1214 comm=clevis-luks-udi exe=/usr/libexec/clevis-luks-udisks2 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:35:09.166:29217) : proctitle=/usr/libexec/flatpak-bwrap --ro-bind /usr /usr --ro-bind /lib /lib --ro-bind /lib64 /lib64 --proc /proc --dev /dev --symlink usr 
+type=SYSCALL msg=audit(05/13/2021 16:35:09.166:29217) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7f9fb8001fa0 a1=0x7f9fb8001470 a2=0x7ffc45ebd520 a3=0x7f9fcf7fd0a0 items=2 ppid=30480 pid=30664 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1214 comm=flatpak-bwrap exe=/usr/libexec/flatpak-bwrap subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:36:31.374:29272) : proctitle=fusermount -u -q -z -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:36:31.374:29272) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fb3ab8c8ded a1=0x7ffc84b3f020 a2=0x7ffc84b3f298 a3=0x7fb3a8b537f8 items=2 ppid=29932 pid=30738 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1214 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:39:43.402:29471) : proctitle=fusermount -o rw,nosuid,nodev,subtype=gvfsd-fuse -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:39:43.402:29471) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fec85298ded a1=0x7ffc02a6c7b0 a2=0x1431100 a3=0x7ffc02a6df8e items=2 ppid=31199 pid=31200 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1215 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:39:46.761:29574) : proctitle=/usr/libexec/clevis-luks-udisks2 
+type=SYSCALL msg=audit(05/13/2021 16:39:46.761:29574) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x1714180 a1=0x1712690 a2=0x1714240 a3=0x7ffdb99413e0 items=2 ppid=31150 pid=31726 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1215 comm=clevis-luks-udi exe=/usr/libexec/clevis-luks-udisks2 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:40:47.181:29837) : proctitle=fusermount -u -q -z -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:40:47.181:29837) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7fec85298ded a1=0x7ffc02a6cb50 a2=0x7ffc02a6cdc8 a3=0x7fec825237f8 items=2 ppid=31199 pid=32049 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1215 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:40:57.148:29958) : proctitle=fusermount -o rw,nosuid,nodev,subtype=gvfsd-fuse -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/13/2021 16:40:57.148:29958) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7f9adfd3fded a1=0x7ffcfa0065f0 a2=0x1823100 a3=0x7ffcfa007f8e items=2 ppid=32415 pid=32416 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1217 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/13/2021 16:41:00.348:30025) : proctitle=/usr/libexec/clevis-luks-udisks2 
+type=SYSCALL msg=audit(05/13/2021 16:41:00.348:30025) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x15b8c80 a1=0x15b7da0 a2=0x15b8d40 a3=0x7ffe857d1660 items=2 ppid=32365 pid=443 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1217 comm=clevis-luks-udi exe=/usr/libexec/clevis-luks-udisks2 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/17/2021 10:42:57.695:37892) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/17/2021 10:42:57.695:37892) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x1a2c960 a1=0x1a34d10 a2=0x1b48230 a3=0x7ffe725dc0e0 items=2 ppid=29855 pid=29897 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts0 ses=1857 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/17/2021 11:40:03.202:38155) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/17/2021 11:40:03.202:38155) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x1ccc960 a1=0x1dd4bd0 a2=0x1de8230 a3=0x7ffca9db9d20 items=2 ppid=30751 pid=30801 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts0 ses=1865 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/17/2021 12:11:15.923:38304) : proctitle=sudo -i 
+type=SYSCALL msg=audit(05/17/2021 12:11:15.923:38304) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x1d2fbe0 a1=0x1d18d10 a2=0x1de8230 a3=0x7ffca9db9d20 items=2 ppid=30751 pid=31437 auid=jake uid=jake gid=jake euid=root suid=root fsuid=root egid=jake sgid=jake fsgid=jake tty=pts0 ses=1865 comm=sudo exe=/usr/bin/sudo subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+type=PROCTITLE msg=audit(05/17/2021 15:22:59.060:62710) : proctitle=fusermount -u -q -z -- /run/user/1003/gvfs 
+type=SYSCALL msg=audit(05/17/2021 15:22:59.060:62710) : arch=x86_64 syscall=execve success=yes exit=0 a0=0x7f9adfd3fded a1=0x7ffcfa006990 a2=0x7ffcfa006c08 a3=0x7f9adcfca7f8 items=2 ppid=32415 pid=8056 auid=cd uid=cd gid=cd euid=root suid=root fsuid=root egid=cd sgid=cd fsgid=cd tty=(none) ses=1217 comm=fusermount exe=/usr/bin/fusermount subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 key=sudolog 
+
+#############################################################
+ 3. BAD LOGIN ATTEMPTS ///// Verify no suspicious activity
+testdom\jake ssh:notty    10.10.10.101     Tue May 11 16:21:36 2021 - Tue May 11 16:21:36 2021  (00:00)    
+
+btmp begins Tue May 11 16:21:36 2021
+
+#############################################################
+ 4. ACCOUNT LOCKOUTS /////
+jaketest
+
+#############################################################
+ 5. CDROM ACTIVITY ///// Verify against MEDIA LOG
+<no matches>
+
+#############################################################
+ 6. ACCOUNT, GROUP, ROLE CHANGES ///// Verify all changes are authorized and notated
+----
+type=DEL_USER msg=audit(05/06/2021 17:18:51.148:2280) : pid=25346 uid=root auid=jkelley ses=1 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=delete-user id=unknown(12) exe=/usr/sbin/userdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_GROUP msg=audit(05/06/2021 17:18:51.193:2306) : pid=25351 uid=root auid=jkelley ses=1 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=delete-group id=unknown(20) exe=/usr/sbin/groupdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_GROUP msg=audit(05/12/2021 10:25:57.787:11909) : pid=22289 uid=root auid=root ses=970 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group acct=jaketest exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_USER msg=audit(05/12/2021 10:25:57.791:11911) : pid=22289 uid=root auid=root ses=970 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-user id=jaketest exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 10:26:07.278:11974) : pid=22297 uid=root auid=root ses=970 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 10:26:41.319:11990) : pid=22305 uid=root auid=root ses=970 subj=unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 msg='op=PAM:chauthtok grantors=pam_pwquality,pam_unix,pam_pwquality acct=jaketest exe=/usr/bin/passwd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 10:26:48.777:11995) : pid=22311 uid=root auid=root ses=970 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 10:51:14.638:12106) : pid=22640 uid=root auid=root ses=975 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 10:51:22.014:12123) : pid=22647 uid=root auid=root ses=975 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 10:51:25.084:12140) : pid=22654 uid=root auid=root ses=975 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 13:50:57.674:12392) : pid=24436 uid=root auid=root ses=998 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 13:51:01.962:12409) : pid=24443 uid=root auid=root ses=998 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 13:58:00.023:12484) : pid=24746 uid=root auid=root ses=971 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=updating-password id=jaketest exe=/usr/sbin/usermod hostname=localhost.localdomain addr=? terminal=pts/1 res=success' 
+----
+type=ADD_GROUP msg=audit(05/12/2021 14:04:06.950:12585) : pid=25005 uid=root auid=root ses=971 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group acct=jake exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/1 res=success' 
+----
+type=ADD_USER msg=audit(05/12/2021 14:04:06.957:12587) : pid=25005 uid=root auid=root ses=971 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-user id=jake exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/1 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/12/2021 14:04:14.804:12649) : pid=25011 uid=root auid=root ses=971 subj=unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 msg='op=PAM:chauthtok grantors=pam_pwquality,pam_unix,pam_pwquality acct=jake exe=/usr/bin/passwd hostname=localhost.localdomain addr=? terminal=pts/1 res=success' 
+----
+type=ADD_GROUP msg=audit(05/13/2021 14:08:33.822:22007) : pid=18241 uid=root auid=root ses=1186 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group acct=cd exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_USER msg=audit(05/13/2021 14:08:33.826:22009) : pid=18241 uid=root auid=root ses=1186 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-user id=cd exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/13/2021 14:08:46.515:22071) : pid=18247 uid=root auid=root ses=1186 subj=unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 msg='op=PAM:chauthtok grantors=pam_pwquality,pam_unix,pam_pwquality acct=cd exe=/usr/bin/passwd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_GROUP msg=audit(05/13/2021 14:13:27.265:22564) : pid=19521 uid=root auid=root ses=1186 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group id=dta exe=/usr/sbin/groupadd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_GROUP msg=audit(05/17/2021 14:13:36.687:39719) : pid=1141 uid=root auid=root ses=1858 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group id=nailsgroup exe=/usr/sbin/groupadd hostname=localhost.localdomain addr=? terminal=pts/1 res=success' 
+----
+type=ADD_USER msg=audit(05/17/2021 14:13:40.237:39739) : pid=1148 uid=root auid=root ses=1858 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-user id=nails exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/1 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/17/2021 14:13:47.293:39773) : pid=1154 uid=root auid=root ses=1858 subj=unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 msg='op=PAM:chauthtok grantors=pam_pwquality,pam_unix,pam_pwquality acct=nails exe=/usr/bin/passwd hostname=localhost.localdomain addr=? terminal=pts/1 res=success' 
+----
+type=DEL_USER msg=audit(05/17/2021 14:37:31.839:44174) : pid=2665 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:useradd_t:s0-s0:c0.c1023 msg='op=delete-user id=nails exe=/usr/sbin/userdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_GROUP msg=audit(05/17/2021 14:37:31.910:44210) : pid=2670 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:groupadd_t:s0-s0:c0.c1023 msg='op=delete-group id=nailsgroup exe=/usr/sbin/groupdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_GROUP msg=audit(05/17/2021 14:38:34.328:45050) : pid=2870 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group acct=:q exe=/usr/sbin/groupadd hostname=localhost.localdomain addr=? terminal=pts/0 res=failed' 
+----
+type=ADD_GROUP msg=audit(05/17/2021 14:38:54.046:45065) : pid=2993 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group id=nailsgroup exe=/usr/sbin/groupadd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_USER msg=audit(05/17/2021 14:38:54.073:45085) : pid=2999 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-user id=nails exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/17/2021 14:40:22.928:49074) : pid=3793 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 msg='op=PAM:chauthtok grantors=pam_pwquality,pam_unix,pam_pwquality acct=nails exe=/usr/bin/passwd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_USER msg=audit(05/17/2021 14:51:21.379:49343) : pid=4163 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:useradd_t:s0-s0:c0.c1023 msg='op=delete-user id=nails exe=/usr/sbin/userdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_GROUP msg=audit(05/17/2021 14:51:21.436:49379) : pid=4168 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:groupadd_t:s0-s0:c0.c1023 msg='op=delete-group id=nailsgroup exe=/usr/sbin/groupdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_USER msg=audit(05/17/2021 14:51:36.741:50218) : pid=4282 uid=root auid=root ses=1889 subj=unconfined_u:system_r:useradd_t:s0 msg='op=deleting-user-not-found acct=mfecma exe=/usr/sbin/userdel hostname=? addr=? terminal=? res=failed' 
+----
+type=ADD_GROUP msg=audit(05/17/2021 14:51:50.543:51491) : pid=4625 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group id=nailsgroup exe=/usr/sbin/groupadd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_USER msg=audit(05/17/2021 14:51:50.566:51511) : pid=4631 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-user id=nails exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/17/2021 14:52:47.705:55482) : pid=5419 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 msg='op=PAM:chauthtok grantors=pam_pwquality,pam_unix,pam_pwquality acct=nails exe=/usr/bin/passwd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_USER msg=audit(05/17/2021 14:54:49.538:55585) : pid=5639 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:useradd_t:s0-s0:c0.c1023 msg='op=delete-user id=nails exe=/usr/sbin/userdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_GROUP msg=audit(05/17/2021 14:54:49.597:55621) : pid=5644 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:groupadd_t:s0-s0:c0.c1023 msg='op=delete-group id=nailsgroup exe=/usr/sbin/groupdel hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=DEL_USER msg=audit(05/17/2021 14:54:59.143:56460) : pid=5745 uid=root auid=root ses=1889 subj=unconfined_u:system_r:useradd_t:s0 msg='op=deleting-user-not-found acct=mfecma exe=/usr/sbin/userdel hostname=? addr=? terminal=? res=failed' 
+----
+type=ADD_GROUP msg=audit(05/17/2021 14:55:52.260:57739) : pid=6092 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-group id=nailsgroup exe=/usr/sbin/groupadd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=ADD_USER msg=audit(05/17/2021 14:55:52.290:57759) : pid=6098 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023 msg='op=add-user id=nails exe=/usr/sbin/useradd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+----
+type=USER_CHAUTHTOK msg=audit(05/17/2021 14:56:52.201:61739) : pid=6968 uid=root auid=root ses=1889 subj=unconfined_u:unconfined_r:passwd_t:s0-s0:c0.c1023 msg='op=PAM:chauthtok grantors=pam_pwquality,pam_unix,pam_pwquality acct=nails exe=/usr/bin/passwd hostname=localhost.localdomain addr=? terminal=pts/0 res=success' 
+
+#############################################################
+ 7. CHECK FOR NULL PASSWORDS ///// Verify no null passwords
+
+#############################################################
+ 8. SYSTEM REBOOTS /////
+reboot   system boot  0.0.0.0          Mon May 17 08:24:14 2021 - Mon May 17 17:51:04 2021  (09:26)    
+reboot   system boot  0.0.0.0          Thu May  6 10:31:13 2021 - Mon May 17 15:23:11 2021 (11+04:51)  
+reboot   system boot  0.0.0.0          Thu May  6 10:19:46 2021 - Thu May  6 17:31:10 2021  (07:11)    
+reboot   system boot  0.0.0.0          Wed May  5 03:22:29 2021 - Thu May  6 17:19:42 2021 (1+13:57)   
+
+wtmp begins Wed May  5 03:22:29 2021
+
+#############################################################
+ 9. AVAILABLE DRIVE SPACE ///// Verify no partitions are dangerously close to filling up, will lock system
+Filesystem                    Size  Used Avail Use% Mounted on
+devtmpfs                      869M     0  869M   0% /dev
+tmpfs                         887M     0  887M   0% /dev/shm
+tmpfs                         887M  8.9M  878M   1% /run
+tmpfs                         887M     0  887M   0% /sys/fs/cgroup
+/dev/mapper/rhel-root          13G  6.5G  5.9G  53% /
+/dev/sda2                     506M  177M  330M  35% /boot
+/dev/sda1                     200M   10M  190M   6% /boot/efi
+/dev/mapper/rhel-tmp          5.0G  407M  4.6G   9% /tmp
+/dev/mapper/rhel-home          20G  103M   20G   1% /home
+/dev/mapper/rhel-var          5.0G  200M  4.8G   4% /var
+/dev/mapper/rhel-varlog       2.5G   50M  2.5G   2% /var/log
+/dev/mapper/rhel-varlogaudit  2.5G   95M  2.4G   4% /var/log/audit
+tmpfs                         178M     0  178M   0% /run/user/0
+
+#############################################################
+ 10. AVAILABLE MEMORY ///// Verify nothing is tapping system at memory capacity
+              total        used        free      shared  buff/cache   available
+Mem:           1.7G        660M         86M        9.1M        1.0G        955M
+Swap:          2.5G          0B        2.5G
+
+#############################################################
+ 11. ACTIVE NETWORK CONNECTIONS ///// Verify no unauthorized connections or ports are open
+Active Internet connections (servers and established)
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name    
+tcp        0      0 0.0.0.0:55443           0.0.0.0:*               LISTEN      2397/nailswebd      
+tcp        0      0 0.0.0.0:22              0.0.0.0:*               LISTEN      1879/sshd           
+tcp        0      0 127.0.0.1:631           0.0.0.0:*               LISTEN      1876/cupsd          
+tcp        0      0 127.0.0.1:25            0.0.0.0:*               LISTEN      2163/master         
+tcp        0      0 127.0.0.1:65443         0.0.0.0:*               LISTEN      2374/nailsd         
+tcp        0      0 0.0.0.0:111             0.0.0.0:*               LISTEN      1370/rpcbind        
+tcp        0      0 127.0.0.1:65443         127.0.0.1:33574         ESTABLISHED 2376/nailslogd      
+tcp        0      0 127.0.0.1:33574         127.0.0.1:65443         ESTABLISHED 2386/mon            
+tcp6       0      0 :::22                   :::*                    LISTEN      1879/sshd           
+tcp6       0      0 ::1:631                 :::*                    LISTEN      1876/cupsd          
+tcp6       0      0 ::1:25                  :::*                    LISTEN      2163/master         
+tcp6       0      0 :::111                  :::*                    LISTEN      1370/rpcbind        
+
+#############################################################
+ 12. SELINUX MODE ///// Verify SELINUX is Enforcing
+Enforcing
+
+#############################################################
